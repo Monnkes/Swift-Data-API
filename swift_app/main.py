@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 
-from .databse import init_db
+from .database import init_db
 
 app = FastAPI()
 
 
-@app.lifespan("startup")
-def on_startup():
-    init_db()
+@app.on_event("startup")
+async def startup_event():
+    await init_db()
 
 
 @app.get("/")

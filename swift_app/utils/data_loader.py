@@ -1,20 +1,23 @@
 import pandas as pd
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
-from swift_app.models.bank_model import Bank
-from swift_app.settings import config
-from swift_app.data.column_mapping import COLUMN_MAPPING
+from ..models.bank_model import Bank
+from ..settings import config
+from ..data.column_mapping import COLUMN_MAPPING
 
 
-def load_initial_data(db: Session):
-    if db.query(Bank).count() > 0:
+async def load_initial_data(db: AsyncSession):
+    result = await db.execute(select(Bank))
+    if result.scalars().first() is not None:
         return
 
     df = pd.read_excel(config.SWIFT_DATA_URL)
     df = df.drop(["CODE TYPE", "TOWN NAME", "TIME ZONE"], axis=1)
     df = df.rename(columns=COLUMN_MAPPING)
+    df["isHeadquarter"] = df["swiftCode"].str[-3:] == "XXX"
     records = df.to_dict(orient="records")
     bank_objects = [Bank(**record) for record in records]
 
-    db.bulk_save_objects(bank_objects)
-    db.commit()
+    db.add_all(bank_objects)
+    await db.commit()

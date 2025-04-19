@@ -1,14 +1,12 @@
-from sqlalchemy import Column, String, Boolean
-
-from swift_app.databse import Base
+from sqlmodel import SQLModel, Field
 
 
-class Bank(Base):
+class Bank(SQLModel, table=True):
     __tablename__ = "banks"
 
-    swiftCode = Column(String, primary_key=True, index=True)
-    address = Column(String, nullable=True)
-    bankName = Column(String, nullable=False)
-    countryISO2 = Column(String, nullable=False, index=True)
-    countryName = Column(String, nullable=False)
-    isHeadquarter = Column(Boolean, nullable=False)
+    swiftCode: str = Field(primary_key=True, index=True)
+    address: str = Field(nullable=True)
+    bankName: str = Field(nullable=False)
+    countryISO2: str = Field(nullable=False)
+    countryName: str = Field(nullable=False)
+    isHeadquarter: bool = Field(nullable=False)

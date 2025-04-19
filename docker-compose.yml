@@ -20,7 +20,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./swift_app:/app
+      - ./swift_app:/app/swift_app
+
 
 volumes:
   postgres_data:
