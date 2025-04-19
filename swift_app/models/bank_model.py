@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Boolean
+
 from swift_app.databse import Base
 
 
