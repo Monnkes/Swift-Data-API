@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class Bank(BaseModel):
+class BankCreate(BaseModel):
     address: str = Field()
     bankName: str = Field()
     countryISO2: str = Field()
