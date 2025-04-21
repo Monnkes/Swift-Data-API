@@ -2,9 +2,9 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 from fastapi import HTTPException, status
 
-from ..services.bank_service import BankService
-from ..repositories.bank_repository import BankRepository
-from ..schemas.bank_schemas import BankCreate
+from ...services.bank_service import BankService
+from ...repositories.bank_repository import BankRepository
+from ...schemas.bank_schemas import BankCreate
 
 
 @pytest.fixture
