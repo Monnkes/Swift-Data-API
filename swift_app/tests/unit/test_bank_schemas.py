@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from ..schemas.bank_schemas import BankCreate
+from ...schemas.bank_schemas import BankCreate
 
 
 @pytest.fixture
