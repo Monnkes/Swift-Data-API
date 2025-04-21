@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 
 from .database import init_db
+from .routers.bank_router import bank_router
 
 app = FastAPI()
+app.include_router(bank_router)
 
 
 @app.on_event("startup")
