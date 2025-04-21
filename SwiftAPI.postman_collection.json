@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "d28a0b7d-25d0-4790-9b44-27d1039d7b07",
+		"name": "SwiftAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43359334"
+	},
+	"item": [
+		{
+			"name": "get_headquarter_details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/swift-codes/BPKOPLPWXXX",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"swift-codes",
+						"BPKOPLPWXXX"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_branch_details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/swift-codes/CRLYMCM1FVI",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"swift-codes",
+						"CRLYMCM1FVI"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add_new_bank",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": \"Example address\",\r\n    \"bankName\": \"Example bank name\",\r\n    \"countryISO2\": \"PL\",\r\n    \"countryName\": \"POLAND\",\r\n    \"isHeadquarter\": \"False\",\r\n    \"swiftCode\": \"EXAMPLE1FVI\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/swift-codes/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"swift-codes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add_new_bank_invalid_data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": \"Example address\",\r\n    \"bankName\": \"Example bank name\",\r\n    \"countryISO2\": \"P\",\r\n    \"countryName\": \"POLA2ND\",\r\n    \"isHeadquarter\": \"False\",\r\n    \"swiftCode\": \"EXAMPLE1FVI\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/swift-codes/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"swift-codes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_bank",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/swift-codes/EXAMPLE1FVI",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"swift-codes",
+						"EXAMPLE1FVI"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_bank_invalid_swift_code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/swift-codes/BPKOPLPWXX",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"swift-codes",
+						"BPKOPLPWXX"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_banks_by_country_code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/swift-codes/country/PL",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"swift-codes",
+						"country",
+						"PL"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

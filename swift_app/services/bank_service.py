@@ -82,9 +82,10 @@ class BankService:
             )
 
         except ValidationError as e:
+            error_messages = [error["msg"] for error in e.errors()]
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=str(e.errors()),
+                detail={"errors": error_messages},
             )
         except Exception as e:
             raise HTTPException(
