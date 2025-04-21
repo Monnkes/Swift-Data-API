@@ -15,17 +15,29 @@ class BankRepository:
     async def get_bank_by_swift(self, swift_code: str) -> Bank | None:
         return await self.db.get(Bank, swift_code)
 
+    async def get_bank_branches(self, swift_base: str) -> List[Bank] | None:
+        pattern = swift_base + "___"
+
+        query = (
+            select(Bank)
+            .where(Bank.swiftCode.like(pattern))
+            .where(Bank.swiftCode != swift_base + "XXX")
+        )
+
+        result = await self.db.execute(query)
+        return result.scalars().all()
+
     async def get_banks_by_country_code(self, countryISO2: str) -> List[Bank] | None:
         query = select(Bank).where(Bank.countryISO2 == countryISO2)
         result = await self.db.execute(query)
-        return result.all()
+        return result.scalars().all()
 
-    async def add_bank(self, bank_data: BankCreate) -> Bank:
+    async def add_bank(self, bank_data: BankCreate) -> bool:
         bank = Bank(**bank_data.model_dump())
         self.db.add(bank)
         await self.db.commit()
         await self.db.refresh(bank)
-        return bank
+        return True
 
     async def delete_bank(self, swift_code: str) -> bool:
         bank = await self.get_bank_by_swift(swift_code)
