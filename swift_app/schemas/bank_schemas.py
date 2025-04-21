@@ -1,4 +1,5 @@
 from sqlmodel import SQLModel, Field
+from pydantic import ConfigDict, field_validator
 from typing import List
 
 
@@ -10,6 +11,26 @@ class BankCreate(SQLModel):
     isHeadquarter: bool
     swiftCode: str
 
+    @field_validator("swiftCode")
+    def validate_swift_code(cls, v):
+        if len(v) != 11:
+            raise ValueError("SWIFT code must be exactly 11 characters long")
+        if not v.isupper() or not v.isalnum():
+            raise ValueError("SWIFT code must be uppercase alphanumeric")
+        return v
+
+    @field_validator("countryISO2")
+    def validate_country_iso(cls, v):
+        if len(v) != 2 or not v.isalpha() or not v.isupper():
+            raise ValueError("Country code must be 2 uppercase letters")
+        return v
+
+    @field_validator("countryName")
+    def validate_country_name(cls, v):
+        if not v.isupper():
+            raise ValueError("Country name must be uppercase")
+        return v
+
 
 class BasicBankResponse(SQLModel):
     address: str
@@ -18,8 +39,7 @@ class BasicBankResponse(SQLModel):
     isHeadquarter: bool
     swiftCode: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class DetailedBankResponse(SQLModel):
@@ -31,8 +51,7 @@ class DetailedBankResponse(SQLModel):
     swiftCode: str
     branches: List[BasicBankResponse] = Field(default_factory=list)
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CountryBankResponse(SQLModel):
@@ -40,5 +59,4 @@ class CountryBankResponse(SQLModel):
     countryName: str
     swiftCodes: List[BasicBankResponse] = Field(default_factory=list)
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
