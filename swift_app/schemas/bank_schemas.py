@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field
-from pydantic import ConfigDict, field_validator
+from pydantic import ConfigDict, field_validator, model_validator
 from typing import List
 
 
@@ -27,9 +27,17 @@ class BankCreate(SQLModel):
 
     @field_validator("countryName")
     def validate_country_name(cls, v):
-        if not v.isupper():
-            raise ValueError("Country name must be uppercase")
+        if not v.isupper() or any(char.isdigit() for char in v):
+            raise ValueError("Country name must be uppercase letters")
         return v
+
+    @model_validator(mode="after")
+    def validate_headquarter(self):
+        if self.isHeadquarter and not self.swiftCode.endswith("XXX"):
+            raise ValueError("Headquarter must have XXX as last 3 characters")
+        if not self.isHeadquarter and self.swiftCode.endswith("XXX"):
+            raise ValueError("Branch must not have XXX as last 3 characters")
+        return self
 
 
 class BasicBankResponse(SQLModel):
