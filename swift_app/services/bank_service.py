@@ -1,6 +1,7 @@
 from fastapi.params import Depends
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
+from pydantic import ValidationError
 
 from ..repositories.bank_repository import BankRepository, get_bank_repository
 from ..schemas.bank_schemas import (
@@ -30,11 +31,13 @@ class BankService:
             )
 
         if existing_bank.isHeadquarter:
-            response_data = DetailedBankResponse.from_orm(existing_bank)
+            response_data = DetailedBankResponse.model_validate(existing_bank)
             branches = await self.bank_repository.get_bank_branches(swift_code[:-3])
-            response_data.branches = [BasicBankResponse.from_orm(b) for b in branches]
+            response_data.branches = [
+                BasicBankResponse.model_validate(b) for b in branches
+            ]
         else:
-            response_data = BasicBankResponse.from_orm(existing_bank)
+            response_data = BasicBankResponse.model_validate(existing_bank)
 
         return JSONResponse(
             status_code=status.HTTP_200_OK, content=response_data.model_dump()
@@ -52,7 +55,7 @@ class BankService:
         response_data = CountryBankResponse(
             countryISO2=countryISO2,
             countryName=banks[0].countryName,
-            swiftCodes=[BasicBankResponse.from_orm(bank) for bank in banks],
+            swiftCodes=[BasicBankResponse.model_validate(bank) for bank in banks],
         )
 
         return JSONResponse(
@@ -78,6 +81,11 @@ class BankService:
                 content={"message": "Bank successfully created"},
             )
 
+        except ValidationError as e:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=str(e.errors()),
+            )
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
